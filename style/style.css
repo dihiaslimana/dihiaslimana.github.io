@@ -1,0 +1,777 @@
+/* ===== Couleurs du site =====
+   Remplace ces valeurs par les couleurs de ton logo.
+   Tout le site les utilise via var(--nom). */
+:root {
+    --couleur-principale: #e8558a;  /* rose foncé du "D" */
+    --couleur-secondaire: #f6a8c4;  /* rose clair du "S" */
+    --couleur-fond: #fff7fa;        /* blanc légèrement rosé */
+    --couleur-texte: #2b1a21;       /* brun-prune très foncé */
+    --couleur-navbar: #2b1a21;      /* fond de la navbar (prune foncé) */
+
+    /* Nuances de prune (sections Education et suivantes) */
+    --prune: #5a3347;               /* prune moyen : traits, badges, dates */
+    --prune-clair: #ece3e8;         /* prune très clair : fonds des icônes/badges */
+    --prune-carte: #f7f3f5;         /* fond des cartes (presque blanc, à peine mauve) */
+    --prune-bordure: #e2d6dc;       /* bordure des cartes */
+}
+
+/* ===== Base ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--couleur-fond);
+    color: var(--couleur-texte);
+    line-height: 1.6;
+}
+
+/* ===== En-tête et menu ===== */
+header {
+    background-color: var(--couleur-navbar);
+    padding: 1rem;
+    display: flex;                   /* logo et menu sur la même ligne */
+    align-items: center;             /* centrés verticalement */
+    justify-content: space-between;  /* logo à gauche, menu à droite */
+}
+
+.logo {
+    display: flex;
+    padding-left: 10rem;  /* espace entre le bord gauche et le logo */
+}
+
+.logo img {
+    height: 50px;  /* change cette valeur pour agrandir/réduire le logo */
+}
+
+nav ul {
+    display: flex;
+    gap: 3rem;
+    list-style: none;
+    justify-content: right;
+    padding-right: 10rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: var(--couleur-principale);
+}
+
+/* Écrans moyens : on réduit les marges pour que le menu ne touche pas le logo */
+@media (max-width: 1250px) {
+    .logo {
+        padding-left: 2rem;
+    }
+
+    nav ul {
+        padding-right: 2rem;
+        gap: 2rem;
+    }
+}
+
+/* ===== Sections ===== */
+section {
+    padding: 4rem 1rem;
+}
+
+/* ===== Section Home : ton nom ===== */
+#home {
+    text-align: center;
+    padding-bottom: 0;   /* rapproche le nom de la section About */
+}
+
+.hero-name {
+    font-family: "Playfair Display", serif;
+    font-size: clamp(2.5rem, 8vw, 5rem);  /* s'adapte à la taille de l'écran */
+    letter-spacing: 2px;
+}
+
+/* Chaque lettre (créée par le JS) */
+.lettre {
+    display: inline-block;
+    opacity: 0;
+    /* dégradé avec les couleurs du logo, appliqué dans le texte */
+    background: linear-gradient(90deg,
+        var(--couleur-principale),
+        var(--couleur-navbar),
+        var(--couleur-secondaire),
+        var(--couleur-principale));
+    background-size: 400% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    /* 1) apparition  2) vague de couleur qui passe en boucle */
+    animation:
+        apparition 0.6s ease forwards,
+        vague-couleur 6s linear infinite;
+}
+
+.espace {
+    display: inline-block;
+    width: 0.4em;  /* espace entre prénom et nom */
+}
+
+@keyframes apparition {
+    from { opacity: 0; transform: translateY(-40px) rotate(-10deg); }
+    to   { opacity: 1; transform: translateY(0) rotate(0); }
+}
+
+@keyframes vague-couleur {
+    from { background-position: 0% 50%; }
+    to   { background-position: 400% 50%; }
+}
+
+/* Petite ligne rose sous le nom, qui s'allonge après les lettres */
+.hero-line {
+    height: 3px;
+    width: 0;
+    margin: 0.5rem auto 0;
+    background: linear-gradient(90deg, var(--couleur-principale), var(--couleur-secondaire));
+    border-radius: 3px;
+    animation: allonger 1s ease forwards;
+    animation-delay: 1.4s;
+}
+
+@keyframes allonger {
+    to { width: 120px; }
+}
+
+/* ===== Section About ===== */
+#about h2 {
+    color: var(--couleur-principale);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.about-container {
+    display: flex;          /* les deux colonnes côte à côte */
+    align-items: center;    /* centrées verticalement */
+    gap: 7rem;              /* espace entre la photo et le texte */
+    max-width: 1000px;      /* largeur max du bloc */
+    margin: 0 auto;   
+    /* centre le bloc dans la page */
+}
+
+.about-photo {
+    flex: 1;  /* colonne gauche : 1 part */
+    display: flex;
+    justify-content: center;
+}
+
+/* Le rond qui contient la photo */
+.photo-ring {
+    position: relative;
+    width: 260px;               /* taille du rond */
+    height: 260px;
+    border-radius: 50%;
+    transition: transform 0.2s ease-out;  /* inclinaison fluide (JS) */
+}
+
+/* L'anneau rose qui tourne derrière la photo */
+.photo-ring::before {
+    content: "";
+    position: absolute;
+    inset: -6px;                /* épaisseur de l'anneau */
+    border-radius: 50%;
+    background: conic-gradient(
+        var(--couleur-principale),
+        var(--couleur-secondaire),
+        transparent,
+        var(--couleur-principale)
+    );
+    animation: tourner 4s linear infinite;
+}
+
+.photo-ring img {
+    position: relative;         /* passe au-dessus de l'anneau */
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;         /* photo ronde */
+    object-fit: cover;          /* remplit le rond sans se déformer */
+    object-position: top;       /* garde le visage visible */
+    border: 5px solid var(--couleur-fond);
+}
+
+/* Texte qui tourne autour de la photo */
+.about-photo {
+    padding: 60px 0;  /* laisse de la place au texte autour du rond */
+}
+
+.orbit-text {
+    position: absolute;
+    inset: -22%;                     /* le texte dépasse autour du rond */
+    width: 144%;
+    height: 144%;
+    overflow: visible;
+    animation: tourner 20s linear infinite reverse;  /* sens inverse de l'anneau */
+    pointer-events: none;            /* n'empêche pas l'inclinaison à la souris */
+}
+
+.orbit-text text {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.orbit-word {
+    fill: var(--couleur-principale);
+    transition: fill 1s ease;        /* changement de couleur fluide (JS) */
+}
+
+.orbit-dot {
+    fill: var(--couleur-secondaire);
+}
+
+@keyframes tourner {
+    to { transform: rotate(360deg); }
+}
+
+/* Apparition au défilement : caché au départ, le JS ajoute .visible */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.about-text {
+    flex: 2;  /* colonne droite : 2 parts (plus large que la photo) */
+}
+
+.about-text p {
+    margin-bottom: 1rem;
+}
+
+/* Sur téléphone : photo au-dessus, texte en dessous */
+@media (max-width: 700px) {
+    .about-container {
+        flex-direction: column;
+    }
+
+    .photo-ring {
+        width: 200px;   /* rond plus petit sur téléphone */
+        height: 200px;
+    }
+}
+
+/* ===== En-tête de section (réutilisable pour Projects, Contact...) ===== */
+.section-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.section-label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 3px;           /* lettres espacées */
+    text-transform: uppercase;     /* écrit en majuscules */
+    color: var(--couleur-texte);
+    opacity: 0.7;
+}
+
+.section-title {
+    font-family: "Playfair Display", serif;
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    color: var(--couleur-texte);
+    line-height: 1.2;
+}
+
+.section-line {
+    width: 40px;
+    height: 2px;
+    background-color: var(--prune);
+    margin: 0.8rem 0 1.2rem;
+}
+
+.section-intro {
+    font-size: 0.95rem;
+    opacity: 0.75;
+    margin-bottom: 2rem;
+}
+
+/* ===== Section Education : les cartes ===== */
+.cards {
+    display: grid;
+    grid-template-columns: 1fr;  /* 1 carte par ligne (mets repeat(2, 1fr) pour 2 côte à côte) */
+    gap: 1.2rem;
+}
+
+.card {
+    background-color: var(--prune-carte);
+    border: 1px solid var(--prune-bordure);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 14px rgba(43, 26, 33, 0.05);
+}
+
+/* Survol : la carte se soulève (on garde l'apparition de .reveal) */
+.card.visible {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.8s ease;
+}
+
+.card.visible:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(43, 26, 33, 0.15);
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;  /* icône à gauche, badge à droite */
+    align-items: flex-start;
+    margin-bottom: 1.2rem;
+}
+
+.card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: var(--couleur-navbar);  /* carré prune foncé */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: var(--couleur-secondaire);        /* petite touche de rose */
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.card-badge {
+    font-size: 0.65rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--prune);
+    background-color: var(--prune-clair);
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;          /* forme de pilule */
+}
+
+.card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+}
+
+.card-meta {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--prune);
+    margin-bottom: 0.8rem;
+}
+
+.card-desc {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Espace entre deux paragraphes dans une carte (ex : M2 puis M1) */
+.card-desc + .card-desc {
+    margin-top: 0.6rem;
+}
+
+/* "M2" / "M1" en prune */
+.card-desc strong {
+    color: var(--prune);
+}
+
+/* ===== Section Projects ===== */
+/* 2 cartes côte à côte (ajoute "cards-2" à côté de "cards") */
+.cards-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.cards-2 .card {
+    display: flex;
+    flex-direction: column;   /* pour coller le lien en bas de la carte */
+}
+
+/* Étiquettes des technologies */
+.tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;          /* passent à la ligne si besoin */
+    gap: 0.4rem;
+    margin: 1rem 0;
+}
+
+.tags li {
+    font-size: 0.75rem;
+    color: var(--prune);
+    border: 1px solid var(--prune-bordure);
+    background-color: white;
+    padding: 0.15rem 0.6rem;
+    border-radius: 6px;
+}
+
+/* Lien GitHub en bas de la carte */
+.card-link {
+    margin-top: auto;         /* pousse le lien tout en bas */
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: var(--prune);
+    text-decoration: none;
+}
+
+.card-link:hover {
+    color: var(--couleur-principale);
+}
+
+/* ===== Images d'un projet : pile de photos (gérée par le JS) ===== */
+.card-gallery {
+    position: relative;
+    aspect-ratio: 2 / 1;            /* format large, comme tes captures */
+    margin: 0.8rem 1rem 1.6rem;     /* de la place pour les photos inclinées */
+    cursor: zoom-in;
+}
+
+.card-gallery img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;           /* si l'image est recadrée, on garde le haut (titres, logos) */
+    border-radius: 10px;
+    border: 4px solid white;        /* cadre blanc façon photo */
+    box-shadow: 0 8px 20px rgba(43, 26, 33, 0.18);
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+                opacity 0.6s ease, filter 0.6s ease;
+}
+
+/* data-pos = place dans la pile (0 = devant), donnée par le JS */
+.card-gallery img[data-pos="0"] {
+    z-index: 3;
+    transform: none;
+}
+
+.card-gallery img[data-pos="1"] {
+    z-index: 2;
+    transform: translate(14px, -10px) rotate(4deg) scale(0.95);
+    filter: brightness(0.92);
+}
+
+.card-gallery img[data-pos="2"] {
+    z-index: 1;
+    transform: translate(-14px, -16px) rotate(-4deg) scale(0.9);
+    filter: brightness(0.85);
+}
+
+.card-gallery img[data-pos="3"] {   /* 4e image et plus : cachées derrière */
+    z-index: 0;
+    opacity: 0;
+    transform: scale(0.85);
+}
+
+/* Survol : la pile s'ouvre en éventail */
+.card-gallery:hover img[data-pos="0"] {
+    transform: translateY(-4px) scale(1.02);
+}
+
+.card-gallery:hover img[data-pos="1"] {
+    transform: translate(40px, -14px) rotate(7deg) scale(0.95);
+}
+
+.card-gallery:hover img[data-pos="2"] {
+    transform: translate(-40px, -20px) rotate(-7deg) scale(0.9);
+}
+
+/* Petit badge "3 photos" (créé par le JS) */
+.gallery-count {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 5;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: var(--prune);
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+}
+
+/* ===== Image agrandie : fond clair et flouté (créée par le JS) ===== */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(255, 247, 250, 0.85);  /* rose très clair */
+    backdrop-filter: blur(10px);                  /* floute la page derrière */
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 5rem;
+    opacity: 0;
+    pointer-events: none;           /* invisible et non cliquable au départ */
+    transition: opacity 0.35s ease;
+    z-index: 100;
+    cursor: zoom-out;
+}
+
+.lightbox.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 12px;
+    border: 6px solid white;
+    box-shadow: 0 20px 50px rgba(43, 26, 33, 0.25);
+    transform: scale(0.94);         /* petit zoom à l'ouverture */
+    transition: transform 0.35s ease;
+    cursor: default;
+}
+
+.lightbox.open img {
+    transform: scale(1);
+}
+
+/* Boutons : précédente, suivante, fermer */
+.lb-prev,
+.lb-next,
+.lb-close {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background-color: white;
+    color: var(--couleur-navbar);
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(43, 26, 33, 0.15);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.lb-prev { left: 1rem;  top: 50%; transform: translateY(-50%); }
+.lb-next { right: 1rem; top: 50%; transform: translateY(-50%); }
+.lb-close { top: 1rem; right: 1rem; width: 40px; height: 40px; font-size: 1.4rem; }
+
+.lb-prev:hover,
+.lb-next:hover,
+.lb-close:hover {
+    background-color: var(--couleur-navbar);
+    color: white;
+}
+
+/* Compteur "1 / 3" en bas */
+.lb-counter {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--couleur-navbar);
+    background-color: white;
+    padding: 0.2rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Une seule image : on cache flèches et compteur */
+.lightbox.une-seule .lb-prev,
+.lightbox.une-seule .lb-next,
+.lightbox.une-seule .lb-counter {
+    display: none;
+}
+
+@media (max-width: 700px) {
+    .lightbox { padding: 4rem 1rem; }
+    .lb-prev, .lb-next { top: auto; bottom: 1rem; transform: none; width: 40px; height: 40px; }
+}
+
+/* ===== Section Skills ===== */
+/* 3 cartes par ligne (2 sur écran moyen, 1 sur téléphone) */
+.cards-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 950px) {
+    .cards-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+    .cards-3 { grid-template-columns: 1fr; }
+}
+
+/* Icône + titre sur la même ligne */
+.skill-head {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.skill-head h3 {
+    margin-bottom: 0;
+    font-size: 1rem;
+}
+
+/* Étiquettes des compétences : passent en prune au survol */
+.skill-card .tags li {
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    cursor: default;
+}
+
+.skill-card .tags li:hover {
+    background-color: var(--couleur-navbar);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Certificats : format "feuille A4 couchée", image affichée en entier */
+.card-gallery.cert {
+    aspect-ratio: 1.414 / 1;
+}
+
+.card-gallery.cert img {
+    object-fit: contain;            /* pas de recadrage : tout le texte reste visible */
+    background-color: white;
+}
+
+/* Sur téléphone : 1 projet par ligne */
+@media (max-width: 700px) {
+    .cards-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ===== Section Contact : fond prune ===== */
+#contact {
+    background-color: var(--couleur-navbar);
+    color: #f5e9ee;
+    padding: 5rem 1rem;
+}
+
+/* l'en-tête de section passe en clair sur le fond prune */
+#contact .section-label { color: var(--couleur-secondaire); opacity: 1; }
+#contact .section-title { color: white; }
+#contact .section-line  { background-color: var(--couleur-secondaire); }
+#contact .section-intro { opacity: 0.8; }
+
+.contact-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;   /* texte à gauche, contacts à droite */
+    gap: 3rem;
+    align-items: center;
+}
+
+.contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+/* Une ligne de contact */
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1rem;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.contact-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(6px);        /* glisse un peu vers la droite */
+}
+
+.contact-icon {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background-color: var(--couleur-secondaire);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: var(--couleur-navbar);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.contact-info {
+    flex: 1;                          /* prend toute la place restante */
+    display: flex;
+    flex-direction: column;
+    color: inherit;
+    text-decoration: none;
+    min-width: 0;
+}
+
+.contact-info span {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.6;
+}
+
+.contact-info strong {
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;          /* les longues adresses passent à la ligne */
+}
+
+/* Bouton "Copy" de l'email */
+.copy-btn {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: var(--couleur-navbar);
+    background-color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 0.35rem 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.copy-btn:hover {
+    background-color: var(--couleur-secondaire);
+}
+
+.copy-btn.copied {
+    background-color: var(--couleur-secondaire);
+}
+
+/* Sur téléphone : texte au-dessus, contacts en dessous */
+@media (max-width: 700px) {
+    .contact-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== Pied de page ===== */
+footer {
+    background-color: #1f1218;          /* prune encore plus foncé que la section Contact */
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+    padding: 1.2rem;
+    font-size: 0.85rem;
+}
